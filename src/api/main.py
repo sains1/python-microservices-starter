@@ -1,17 +1,21 @@
-from typing import Union
+from dependency_injector import containers, providers
 
 from fastapi import FastAPI
 from shared.otel import test
+from .routers.root import router
 
-app = FastAPI()
+app = FastAPI(
+    title="sample",
+    version="0.0.1",
+)
 
+# configure services
+class Container(containers.DeclarativeContainer):
+    pass
 
+# configure api
 @app.get("/")
-def read_root():
-    print(test)
-    return {"Hello": "Worldc"}
+def root():
+    return ""
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(router)

@@ -1,0 +1,15 @@
+services:
+  dependencies:
+    image: deps
+    build:
+      context: .
+      dockerfile: ./deps.Dockerfile
+
+  api:
+    build:
+      context: .
+      dockerfile: ./src/api/Dockerfile
+      args:
+        - DEPS_IMAGE=deps
+    ports:
+      - 8000:8000

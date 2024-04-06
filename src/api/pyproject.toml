@@ -1,9 +1,14 @@
 [project]
 name = "api"
-version = "0.1.0"
+version = "0.1.1"
 description = "Default template for PDM package"
 authors = []
-dependencies = ["uvicorn[standard]>=0.29.0", "fastapi>=0.110.1", "shared"]
+dependencies = [
+    "uvicorn[standard]>=0.29.0",
+    "fastapi>=0.110.1",
+    "dependency-injector>=4.39.0",
+    "shared",
+]
 requires-python = "==3.10.*"
 license = { text = "_" }
 
