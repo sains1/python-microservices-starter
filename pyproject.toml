@@ -1,0 +1,14 @@
+[project]
+name = "llm_practice"
+version = "0.1.0"
+dependencies = []
+requires-python = "==3.10.*"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "-e api @ file:///${PROJECT_ROOT}/src/api",
+    "-e shared @ file:///${PROJECT_ROOT}/src/shared",
+]
+
+[tool.pdm.scripts]
+start = "python -m uvicorn api.main:app --reload"

@@ -1,0 +1,15 @@
+[project]
+name = "api"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = []
+dependencies = ["uvicorn[standard]>=0.29.0", "fastapi>=0.110.1", "shared"]
+requires-python = "==3.10.*"
+license = { text = "_" }
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+start = "python -m uvicorn main:app --reload"
