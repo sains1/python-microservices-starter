@@ -12,12 +12,5 @@ services:
         - BUILDER_IMAGE=${COMPOSE_PROJECT_NAME}-builder
     depends_on:
       - builder
-
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: ./src/api/Dockerfile
-  #     args:
-  #       - DEPS_IMAGE=deps
-  #   ports:
-  #     - 8000:8000
+    ports:
+      - 8000:8000

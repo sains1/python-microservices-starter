@@ -3,7 +3,7 @@
 ## Dependencies
 
 - [poetry](https://python-poetry.org/docs/)
-- [python-polylith](https://davidvujic.github.io/python-polylith-docs/)
+- [poetry-multiproject-plugin](https://github.com/DavidVujic/poetry-multiproject-plugin)
 
 ## Getting started
 
@@ -17,7 +17,7 @@ make api
 
 ## Docker setup
 
-The `builder` image in `docker-compose.yaml` defines an image with all dependencies installed (incl. poetry and polylith) which can then be used to build individual services
+The `builder` image in `docker-compose.yaml` defines an image with all dependencies installed (incl. poetry etc) which can then be used to build individual services
 
 All other services then follow the same structure (for example see [Api Dockerfile](./projects/api-project/Dockerfile)):
 
