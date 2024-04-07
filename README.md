@@ -17,9 +17,9 @@ make api
 
 ## Docker setup
 
-- The `builder` image in `docker-compose.yaml` defines an image with all dependencies installed (incl. poetry and polylith) which can then be used to build individal services
+The `builder` image in `docker-compose.yaml` defines an image with all dependencies installed (incl. poetry and polylith) which can then be used to build individual services
 
-- All other services then follow the same structure (e.g. see [Api Dockerfile](./projects/api-project/Dockerfile))
+All other services then follow the same structure (for example see [Api Dockerfile](./projects/api-project/Dockerfile)):
 
 1. inherit the builder image
 2. use poetry to build the service
@@ -30,3 +30,8 @@ To build all images:
 ```bash
 docker compose build --no-cache
 ```
+
+## helpful commands
+
+- `poetry add -G dev $pkg_name` add a dev dependency
+- `mypy .` run type checker
