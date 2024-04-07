@@ -31,7 +31,16 @@ To build all images:
 docker compose build --no-cache
 ```
 
-## helpful commands
+## Other
+
+### Helpful commands
 
 - `poetry add -G dev $pkg_name` add a dev dependency
 - `mypy .` run type checker
+- `ruff format` run ruff as formatter
+- `ruff check` run ruff as linter
+
+### Handy vscode extensions
+
+- [ruff-vscode](https://github.com/astral-sh/ruff-vscode)
+- [vscode-mypy](https://github.com/microsoft/vscode-mypy/)
