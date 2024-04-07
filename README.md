@@ -15,6 +15,21 @@
 make api
 ```
 
+3. run observability stack (optional)
+
+`docker-compose.otel.yaml` provides services for logs, traces & metrics using opentelemetry. For higher envs these can be switched out for any otel compatible backend.
+
+```bash
+docker-compose -f docker-compose.otel.yaml up -d
+```
+
+This starts the following services:
+
+- [jaeger (tracing)](http://localhost:16686)
+- [prometheus (metrics)](http://localhost:9090)
+- [seq (logs)](http://localhost:5342/)
+- [otel-collector (bg service for collection)](localhost:4317)
+
 ## Docker setup
 
 The `builder` image in `docker-compose.yaml` defines an image with all dependencies installed (incl. poetry etc) which can then be used to build individual services
