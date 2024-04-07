@@ -1,15 +1,23 @@
 services:
-  dependencies:
-    image: deps
+  builder:
+    image: ${COMPOSE_PROJECT_NAME}-builder
     build:
       context: .
-      dockerfile: ./deps.Dockerfile
-
+      dockerfile: Dockerfile
   api:
     build:
       context: .
-      dockerfile: ./src/api/Dockerfile
+      dockerfile: ./projects/api-project/Dockerfile
       args:
-        - DEPS_IMAGE=deps
-    ports:
-      - 8000:8000
+        - BUILDER_IMAGE=${COMPOSE_PROJECT_NAME}-builder
+    depends_on:
+      - builder
+
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: ./src/api/Dockerfile
+  #     args:
+  #       - DEPS_IMAGE=deps
+  #   ports:
+  #     - 8000:8000
