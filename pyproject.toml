@@ -10,7 +10,7 @@ packages = [
     { include = "otel", from = "components" },
 ]
 
-package-mode = false
+package-mode = true
 
 [tool.poetry.dependencies]
 python = ">=3.12.*"

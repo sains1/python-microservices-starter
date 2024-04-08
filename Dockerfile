@@ -10,4 +10,7 @@ RUN poetry self add poetry-multiproject-plugin
 
 ADD pyproject.toml poetry.lock poetry.toml ./
 
+# turn off package-mode so we can install dependencies without copying all of our packages
+RUN sed -i 's/package-mode = true/package-mode = false/g' 'pyproject.toml'
+
 RUN poetry install --no-ansi
