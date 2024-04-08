@@ -1,4 +1,5 @@
 import logging
+from functools import lru_cache
 
 from fastapi import FastAPI
 from opentelemetry import trace
@@ -22,16 +23,30 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class OtelSettings(BaseSettings):
+    service_name: str
+    otlp_endpoint: str
+    log_level: str = "INFO"
+
+    model_config = SettingsConfigDict(env_file=".env", extra="allow")
+
+
+@lru_cache
+def get_otel_settings(**kwargs):
+    return OtelSettings(**kwargs)
 
 
 def instrument_api(app: FastAPI):
     FastAPIInstrumentor().instrument_app(app)
 
 
-def setup_otel():
+def setup_otel(settings: OtelSettings):
     resource = Resource.create(
         {
-            SERVICE_NAME: "shoppingcart",
+            SERVICE_NAME: settings.service_name,
         }
     )
 
@@ -40,19 +55,19 @@ def setup_otel():
         resource=resource,
     )
     set_logger_provider(logger_provider)
-    exporter = OTLPLogExporter(insecure=True, endpoint="http://localhost:4317")
+    exporter = OTLPLogExporter(insecure=True, endpoint=settings.otlp_endpoint)
     logger_provider.add_log_record_processor(BatchLogRecordProcessor(exporter))
     handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
     logging.basicConfig(level=logging.INFO, handlers=[handler])
 
     # traces
     trace_provider = TracerProvider(resource=resource)
-    processor = BatchSpanProcessor(OTLPSpanExporter(insecure=True, endpoint="http://localhost:4317"))
+    processor = BatchSpanProcessor(OTLPSpanExporter(insecure=True, endpoint=settings.otlp_endpoint))
     trace_provider.add_span_processor(processor)
     trace.set_tracer_provider(trace_provider)
 
     # metrics
-    metric_exporter = OTLPMetricExporter(insecure=True, endpoint="http://localhost:4317")
+    metric_exporter = OTLPMetricExporter(insecure=True, endpoint=settings.otlp_endpoint)
     metric_reader = PeriodicExportingMetricReader(metric_exporter)
     provider = MeterProvider(metric_readers=[metric_reader])
     set_meter_provider(provider)

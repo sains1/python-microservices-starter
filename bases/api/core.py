@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from otel.core import get_logger, get_meter, instrument_api, setup_otel
+from otel.core import get_logger, get_meter, get_otel_settings, instrument_api, setup_otel
 
 app = FastAPI()
 
-setup_otel()
+otel_settings = get_otel_settings(service_name="api")
+setup_otel(otel_settings)
 instrument_api(app)
 
 logger = get_logger("api")
