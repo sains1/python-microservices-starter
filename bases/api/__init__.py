@@ -1,3 +1,3 @@
-from api import core
+from api.core import app
 
-__all__ = ["core"]
+__all__ = ["app"]
