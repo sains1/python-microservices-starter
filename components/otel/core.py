@@ -77,11 +77,10 @@ def get_meter(name: str):
     return get_meter_provider().get_meter(name)
 
 
-def get_logger(name) -> logging.Logger:
+def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
-    logger.info(logger.handlers.__len__)
     return logger
 
 
-def get_tracer():
-    return trace.get_tracer()
+def get_tracer(name: str) -> trace.Tracer:
+    return trace.get_tracer(name)

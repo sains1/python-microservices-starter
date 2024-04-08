@@ -7,6 +7,7 @@ authors = []
 packages = [
     { include = "api", from = "../../bases" },
     { include = "otel", from = "../../components" },
+    { include = "health", from = "../../components" },
 ]
 
 [tool.poetry.dependencies]

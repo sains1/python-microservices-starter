@@ -6,6 +6,7 @@ authors = []
 
 packages = [
     { include = "api", from = "bases" },
+    { include = "health", from = "components" },
     { include = "otel", from = "components" },
 ]
 

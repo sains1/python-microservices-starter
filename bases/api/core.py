@@ -1,24 +1,22 @@
 from fastapi import FastAPI
-from otel.core import get_logger, get_meter, get_otel_settings, instrument_api, setup_otel
+from health.core import map_health_endpoints
+from otel.core import get_otel_settings, instrument_api, setup_otel
 
-app = FastAPI()
+from .things.thing_router import thing_router
 
+app = FastAPI(title="api")
+
+# setup dependencies
 otel_settings = get_otel_settings(service_name="api")
 setup_otel(otel_settings)
 instrument_api(app)
 
-logger = get_logger("api")
-meter = get_meter("api")
+# add routers
+app.include_router(thing_router)
 
-counter = meter.create_counter(
-    name="first_counter",
-    description="TODO",
-    unit="1",
-)
+map_health_endpoints(app)
 
 
 @app.get("/")
-def root() -> dict:
-    logger.info("The FastAPI root endpoint was called.")
-    counter.add(1)
-    return {"message": ""}
+def root():
+    return

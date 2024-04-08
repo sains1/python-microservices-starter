@@ -7,6 +7,7 @@ WORKDIR /app
 
 COPY ./bases/api ./bases/api
 COPY ./components/otel ./components/otel
+COPY ./components/health ./components/health
 COPY ./projects/api-project ./projects/api-project
 
 WORKDIR /app/projects/api-project
