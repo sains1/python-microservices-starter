@@ -1,4 +1,4 @@
-from ns.api import core
+from api import core
 
 
 def test_sample():

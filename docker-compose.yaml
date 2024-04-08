@@ -1,16 +1,19 @@
 services:
   builder:
-    image: ${COMPOSE_PROJECT_NAME}-builder
+    image: ${REGISTRY}builder:${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile
   api:
+    image: ${REGISTRY}api:${TAG:-latest}
     build:
       context: .
       dockerfile: ./projects/api-project/Dockerfile
       args:
-        - BUILDER_IMAGE=${COMPOSE_PROJECT_NAME}-builder
+        - BUILDER_IMAGE=${REGISTRY}builder:${TAG:-latest}
     depends_on:
       - builder
     ports:
       - 8000:8000
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317

@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PYTHON_VERSION: 3.12
+  REGISTRY: ghcr.io/${{ github.repository_owner }}/
+  TAG: latest
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  python_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '${{ env.PYTHON_VERSION }}'
+      
+      - name: poetry_install
+        run: |
+          pip install poetry
+          poetry self add poetry-multiproject-plugin
+        
+      - name: install_dependencies
+        run: poetry install
+
+      - name: ruff_format_check
+        run: poetry run ruff format --check
+
+      - name: ruff_lint_check
+        run: poetry run ruff check
+
+      - name: mypy_check
+        run: poetry run mypy .
+        
+  build:
+    runs-on: ubuntu-latest
+    needs:
+      - python_check
+    env:
+      API_IMAGE_NAME: api
+      BUILDER_IMAGE_NAME: builder
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build_builder
+        run: |
+          docker-compose -f ./docker-compose.yaml build ${{ env.BUILDER_IMAGE_NAME }}
+
+      - name: build_api
+        run: docker-compose -f ./docker-compose.yaml build ${{ env.API_IMAGE_NAME }}
+    
+      - name: login
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      
+      - name: push
+        run: docker push ${{ env.REGISTRY }}${{ env.API_IMAGE_NAME }}:${{ env.TAG }}

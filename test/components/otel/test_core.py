@@ -1,4 +1,4 @@
-from ns.otel import core
+from otel import core
 
 
 def test_sample():
